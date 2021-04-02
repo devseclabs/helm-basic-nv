@@ -40,6 +40,10 @@ resource "helm_release" "nv-helm" {
  repository = var.helm_repo
  chart      = var.helm_chart
 
+ values = [
+    "${file("values.yaml")}"
+  ]
+
    set {
      name  = "imagePullSecrets"
      value = var.secret_name
