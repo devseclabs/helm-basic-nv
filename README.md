@@ -34,5 +34,25 @@
     - plan your deployment - ```terraform plan```
     - apply the changes in your cluster ```terraform apply```
 
+5 . if your are going to use modules, create your module file
+```
+module "nv-deployment" {
+    source                  = "git::https://github.com/devseclabs/helm-basic-nv.git?ref=main"
+    # neuvector settings
+    tag="4.2.1"
+    scanner_replicas = "3"
+    controller_replicas = "3"
+    webui_service = "LoadBalancer"
+
+    # dockerhub settings
+    registry_username   = "user"
+    registry_password   = "pass"
+}
+```
+6. export your context
+```
+export KUBE_CTX="demo"
+export KUBE_CONFIG_PATH="~/.kube/config"
+```
 ### Clean Up
 1. destroy your deployment: ```terraform destroy```
