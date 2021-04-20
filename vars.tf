@@ -15,11 +15,11 @@ variable "env_name" {
 }
 
 variable "scanner_replicas" {
-    default = "2"
+    default = "3"
 }
 
 variable "controller_replicas" {
-    default = "1"
+    default = "3"
 }
 
 variable "containerd" {
