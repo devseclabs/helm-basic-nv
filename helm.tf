@@ -1,3 +1,28 @@
+locals {
+  license_file = file(var.license)
+  eula_yaml = yamlencode({
+    license_key = local.license_file
+  })
+
+  user_yaml = yamlencode({
+    users = [
+      {
+        Email = "test1@nv.com", 
+        Fullname = "readeruser", 
+        Password = var.reader_pass,
+        Role  = "reader",
+        Timeout = 3600
+      },
+      {
+        Fullname = "admin",
+        Password = var.admin_pass,
+        Role  = "admin",
+        Timeout = 3600
+      }
+    ]
+  })
+}
+
 #NAMESPACE CONF
 resource "kubernetes_namespace" "nv-ns" {
   metadata {
@@ -53,6 +78,22 @@ resource "helm_release" "nv-helm" {
      value = var.controller_replicas
    }
    
+   dynamic "set" {
+    for_each = var.with_configmap == true ? [var.with_configmap] : []
+    content {
+      name  = "controller.configmap.enabled"
+      value = set.value
+    }
+  }
+   
+  dynamic "set" {
+    for_each =  var.with_configmap == true ? [var.with_configmap] : []
+    content {
+      name  = "controller.configmap.data"
+      value = yamlencode({"a"="b"})
+    }
+  }
+
     set {
       name = "manager.svc.type"
       value = var.webui_service

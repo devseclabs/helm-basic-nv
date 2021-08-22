@@ -49,3 +49,21 @@ variable "helm_chart" {
 variable "helm_name" {
     default = "my-release"
 }
+
+variable "admin_pass" {
+  default = "admin"
+  #sensitive = true
+}
+
+variable "reader_pass" {
+  default = "demouser123"
+  #sensitive = true
+}
+
+variable "with_configmap" {
+  default = false
+}
+
+variable "license" {
+  #sensitive = true
+}
